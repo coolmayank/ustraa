@@ -10,29 +10,33 @@ import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import Box from "@material-ui/core/Box";
 
+
+
+
+
 const theme = createMuiTheme({
-  typography: {
-    subtitle1: {
-      fontSize: 12
-    },
-    subtitle2: {
-      fontSize: 12
-    },
-    body1: {
-      fontWeight: 500
-    },
-    button: {
-      fontStyle: "italic"
-    }
+  overrides: {
+    typography: {
+      subtitle23 :{
+        fontSize: '8rem',
+        fontWeight: 5,
+        '@media (min-width:350x)': {
+          fontSize: '6rem',
+          
+        },
+            },
+           
+       }
   }
-});
+})
 const useStyles = makeStyles(theme => ({
   button: {
     margin: theme.spacing(1),
     backgroundColor: "green"
   },
   card: {
-    display: "flex"
+    display: "flex",
+   
   },
   details: {
     display: "flex",
@@ -40,9 +44,11 @@ const useStyles = makeStyles(theme => ({
   },
   content: {
     flex: "1 0 auto"
+    
   },
   cover: {
-    width: 150
+    width: 150,
+    display: "flex",
   },
   controls: {
     display: "flex",
@@ -58,8 +64,23 @@ export default function MediaControlCard(props) {
     return (
       <div>
         {props.products.map((products, index) => {
+          let instock
+            if(products.is_in_stock)
+            instock= <div className={classes.controls}>
+                  <Button variant="contained" className={classes.button}>
+                     ADD TO CART
+                  </Button>
+                </div>
+
+          else  
+          instock=<div className={classes.controls}>
+                  <Button variant="contained" className={classes.button} disabled>
+                    OUT OF STOCK
+                  </Button>
+                </div>    
+
           return (
-            <Card key={index} className={classes.card}>
+            <Card className={classes.card}>
               <CardMedia
                 className={classes.cover}
                 image={products.image_urls.x240}
@@ -68,29 +89,27 @@ export default function MediaControlCard(props) {
               <div className={classes.details}>
                 <CardContent className={classes.content}>
                   <ThemeProvider theme={theme}>
-                    <Typography component="h8" variant="body1">
-                      {products.base_product_name}
+                    <Typography component="h8" variant="subtitle23">
+                      {products.name}
                     </Typography>
 
                     <Typography variant="subtitle1" color="textSecondary">
-                      {products.name}
+                     ({products.weight}{products.weight_unit})
                     </Typography>
                     <Typography component="h5" variant="h6">
-                      {products.tagline}
+                     Rs. {products.final_price}
                     </Typography>
                     <Typography
                       variant="subtitle2"
                       color="textSecondary"
                       style={{ textDecorationLine: "line-through" }}
                     >
-                      {products.product_category_content}
+                      Rs.{products.price}
                     </Typography>
                   </ThemeProvider>
                 </CardContent>
-                <div className={classes.controls}>
-                  <Button variant="contained" className={classes.button}>
-                    Primary
-                  </Button>
+                <div>
+                {instock}
                 </div>
               </div>
               <Box component="fieldset" borderColor="transparent" mt={2} ml={5}>
